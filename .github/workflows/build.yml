@@ -1,0 +1,81 @@
+name: Build and Upload Artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout code from all repositories
+      - name: Checkout Core Application
+        uses: actions/checkout@v3
+        with:
+          repository: deep-security-dev/deep-security-core
+          path: repo1
+
+      - name: Checkout Utility Library
+        uses: actions/checkout@v3
+        with:
+          repository: deep-security-dev/deep-security-utils
+          path: repo2
+
+      - name: Checkout API Service
+        uses: actions/checkout@v3
+        with:
+          repository: deep-security-dev/deep-security-api
+          path: repo3
+
+      # Step 2: Scan source code for vulnerabilities
+      - name: Scan Core Application
+        uses: aquasecurity/trivy-action@v0.11.1
+        with:
+          scan-type: fs
+          path: repo1
+
+      - name: Scan Utility Library
+        uses: aquasecurity/trivy-action@v0.11.1
+        with:
+          scan-type: fs
+          path: repo2
+
+      - name: Scan API Service
+        uses: aquasecurity/trivy-action@v0.11.1
+        with:
+          scan-type: fs
+          path: repo3
+
+      # Step 3: Build the code 
+      - name: Build Core Application
+        run: |
+          cd repo1
+          mvn clean package
+
+      - name: Build Utility Library
+        run: |
+          cd repo2
+          mvn clean package
+
+      - name: Build API Service
+        run: |
+          cd repo3
+          mvn clean package
+
+      # Step 4: Upload built artifacts to GitHub Packages
+      - name: Publish Core Application Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: core-application-artifact
+          path: repo1/target/*.jar
+
+      - name: Publish Utility Library Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: utility-library-artifact
+          path: repo2/target/*.jar
+
+      - name: Publish API Service Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-service-artifact
+          path: repo3/target/*.jar
