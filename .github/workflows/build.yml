@@ -2,6 +2,9 @@ name: Build, Scan, Upload, and Deploy Artifacts
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      master
 
 jobs:
   build-scan-deploy:
