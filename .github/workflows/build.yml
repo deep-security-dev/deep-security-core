@@ -26,26 +26,26 @@ jobs:
           repository: deep-security-dev/deep-security-api
           path: repo3
 
-      # Step 2: Scan source code for vulnerabilities
-      - name: Scan Core Application
-        uses: aquasecurity/trivy-action@v0.28.0
-        with:
-          scan-type: fs
-          path: repo1
+      # Step 2: Install Docker for Trivy
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
 
-      - name: Scan Utility Library
-        uses: aquasecurity/trivy-action@v0.28.0
-        with:
-          scan-type: fs
-          path: repo2
+      # Step 3: Scan source code for vulnerabilities using Trivy (via Docker)
+      - name: Scan Core Application Source Code
+        run: |
+          docker run --rm -v $(pwd)/repo1:/project aquasec/trivy fs /project
 
-      - name: Scan API Service
-        uses: aquasecurity/trivy-action@v0.28.0
-        with:
-          scan-type: fs
-          path: repo3
+      - name: Scan Utility Library Source Code
+        run: |
+          docker run --rm -v $(pwd)/repo2:/project aquasec/trivy fs /project
 
-      # Step 3: Build the code 
+      - name: Scan API Service Source Code
+        run: |
+          docker run --rm -v $(pwd)/repo3:/project aquasec/trivy fs /project
+
+      # Step 4: Build the code
       - name: Build Core Application
         run: |
           cd repo1
@@ -61,7 +61,20 @@ jobs:
           cd repo3
           mvn clean package
 
-      # Step 4: Upload built artifacts to GitHub Packages
+      # Step 5: Scan built artifacts for vulnerabilities using Trivy
+      - name: Scan Core Application Artifact
+        run: |
+          docker run --rm -v $(pwd)/repo1/target:/project aquasec/trivy fs /project
+
+      - name: Scan Utility Library Artifact
+        run: |
+          docker run --rm -v $(pwd)/repo2/target:/project aquasec/trivy fs /project
+
+      - name: Scan API Service Artifact
+        run: |
+          docker run --rm -v $(pwd)/repo3/target:/project aquasec/trivy fs /project
+
+      # Step 6: Upload built artifacts to GitHub Packages
       - name: Publish Core Application Artifact
         uses: actions/upload-artifact@v3
         with:
