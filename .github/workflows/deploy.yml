@@ -26,22 +26,34 @@ jobs:
         with:
           name: api-service-artifact
 
-      # Step 2: Scan downloaded artifacts for vulnerabilities
-      - name: Scan Downloaded Artifacts
-        uses: aquasecurity/trivy-action@v0.28.0
-        with:
-          scan-type: artifact
-          path: .
+      # Step 2: Install Docker for Trivy
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
 
-      # Step 3: Deploy JAR files to GitHub Pages
+      # Step 3: Scan downloaded artifacts for vulnerabilities using Trivy (via Docker)
+      - name: Scan Core Application Artifact
+        run: |
+          docker run --rm -v $(pwd)/core-application-artifact:/project aquasec/trivy fs /project
+
+      - name: Scan Utility Library Artifact
+        run: |
+          docker run --rm -v $(pwd)/utility-library-artifact:/project aquasec/trivy fs /project
+
+      - name: Scan API Service Artifact
+        run: |
+          docker run --rm -v $(pwd)/api-service-artifact:/project aquasec/trivy fs /project
+
+      # Step 4: Deploy JAR files to GitHub Pages
       - name: Deploy JAR files to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./deployed-artifacts
           commit_message: "Deploy JAR files to GitHub Pages"
-      
-      # Step 4: Prepare JAR files for deployment
+
+      # Step 5: Prepare JAR files for deployment
       - name: Move JAR Files
         run: |
           mkdir -p deployed-artifacts
