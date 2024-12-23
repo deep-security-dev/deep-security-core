@@ -92,16 +92,44 @@ jobs:
             repo3/target/*.jar
             api-service-scan.txt
 
-      # Step 6: Deploy artifacts and scan results to GitHub Pages
+      # Step 6: Download artifacts for deployment
+      - name: Download Core Application Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: core-application-artifact
+          path: core-application
+
+      - name: Download Utility Library Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: utility-library-artifact
+          path: utility-library
+
+      - name: Download API Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: api-service-artifact
+          path: api-service
+
+      # Step 7: Deploy artifacts and scan results to GitHub Pages
       - name: Prepare Deployment
         run: |
           mkdir -p deployed-artifacts
-          mv core-application-artifact/*.jar deployed-artifacts/
-          mv utility-library-artifact/*.jar deployed-artifacts/
-          mv api-service-artifact/*.jar deployed-artifacts/
-          mv core-application-scan.txt deployed-artifacts/
-          mv utility-library-scan.txt deployed-artifacts/
-          mv api-service-scan.txt deployed-artifacts/
+          cp core-application/*.jar deployed-artifacts/
+          cp utility-library/*.jar deployed-artifacts/
+          cp api-service/*.jar deployed-artifacts/
+          cp core-application/core-application-scan.txt deployed-artifacts/
+          cp utility-library/utility-library-scan.txt deployed-artifacts/
+          cp api-service/api-service-scan.txt deployed-artifacts/
+
+      - name: Generate File Listing
+        run: |
+          cd deployed-artifacts
+          echo "<html><body><h1>Deployed Files</h1><ul>" > index.html
+          for file in $(ls); do
+            echo "<li><a href=\"$file\">$file</a></li>" >> index.html
+          done
+          echo "</ul></body></html>" >> index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
