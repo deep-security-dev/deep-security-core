@@ -28,19 +28,19 @@ jobs:
 
       # Step 2: Scan source code for vulnerabilities
       - name: Scan Core Application
-        uses: aquasecurity/trivy-action@v0.11.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           scan-type: fs
           path: repo1
 
       - name: Scan Utility Library
-        uses: aquasecurity/trivy-action@v0.11.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           scan-type: fs
           path: repo2
 
       - name: Scan API Service
-        uses: aquasecurity/trivy-action@v0.11.0
+        uses: aquasecurity/trivy-action@v0.28.0
         with:
           scan-type: fs
           path: repo3
