@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_run:
+    workflows: ["Build and Upload Artifacts"]
+    types:
+      - completed
+
+jobs:
+  pull-scan-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Download built artifacts
+      - name: Download Core Application Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: core-application-artifact
+
+      - name: Download Utility Library Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: utility-library-artifact
+
+      - name: Download API Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: api-service-artifact
+
+      # Step 2: Scan downloaded artifacts for vulnerabilities
+      - name: Scan Downloaded Artifacts
+        uses: aquasecurity/trivy-action@v0.11.1
+        with:
+          scan-type: artifact
+          path: .
+
+      # Step 3: Deploy JAR files to GitHub Pages
+      - name: Deploy JAR files to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deployed-artifacts
+          commit_message: "Deploy JAR files to GitHub Pages"
+      
+      # Step 4: Prepare JAR files for deployment
+      - name: Move JAR Files
+        run: |
+          mkdir -p deployed-artifacts
+          mv core-application-artifact/*.jar deployed-artifacts/
+          mv utility-library-artifact/*.jar deployed-artifacts/
+          mv api-service-artifact/*.jar deployed-artifacts/
