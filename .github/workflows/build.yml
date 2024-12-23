@@ -12,19 +12,19 @@ jobs:
       - name: Checkout Core Application
         uses: actions/checkout@v3
         with:
-          repository: Egbuka/deep-security-core
+          repository: deep-security-dev/deep-security-core
           path: repo1
 
       - name: Checkout Utility Library
         uses: actions/checkout@v3
         with:
-          repository: Egbuka/deep-security-utils
+          repository: deep-security-dev/deep-security-utils
           path: repo2
 
       - name: Checkout API Service
         uses: actions/checkout@v3
         with:
-          repository: Egbuka/deep-security-api
+          repository: deep-security-dev/deep-security-api
           path: repo3
 
       # Step 2: Install Docker for Trivy
