@@ -96,25 +96,24 @@ jobs:
             api-service-scan.txt
 
       # Step 6: Download artifacts for deployment
-      - name: Download Core Application Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: core-application-artifact
-          path: core-application
+  #    - name: Download Core Application Artifact
+   #     uses: actions/download-artifact@v3
+    #    with:
+     #     name: core-application-artifact
+      #    path: core-application
 
-      - name: Download Utility Library Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: utility-library-artifact
-          path: utility-library
+#      - name: Download Utility Library Artifact
+ #       uses: actions/download-artifact@v3
+  ##       name: utility-library-artifact
+    #      path: utility-library
 
-      - name: Download API Service Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: api-service-artifact
-          path: api-service
+#      - name: Download API Service Artifact
+ #       uses: actions/download-artifact@v3
+  #      with:
+   #       name: api-service-artifact
+    #      path: api-service
 
-      # Step 7: Deploy artifacts and scan results to GitHub Pages
+      # Step 6: Deploy artifacts and scan results to GitHub Pages
       - name: Prepare Deployment
         run: |
           mkdir -p deployed-artifacts
