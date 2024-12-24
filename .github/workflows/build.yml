@@ -42,11 +42,20 @@ jobs:
           cp target/*.jar deployed-artifacts/
           cp core-application-scan.txt deployed-artifacts/
 
-      # Step 6: Deploy to main branch for GitHub Pages
+      # Step 6: Create Index for GitHub Pages
+      - name: Create Index for GitHub Pages
+        run: |
+          echo "<html><body><h1>Deployed Artifacts</h1><ul>" > index.html
+          for file in $(ls deployed-artifacts); do
+            echo "<li><a href='deployed-artifacts/$file'>$file</a></li>" >> index.html
+          done
+          echo "</ul></body></html>" >> index.html
+
+      # Step 7: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add deployed-artifacts/
+          git add deployed-artifacts/ index.html
           git commit -m "Deploy artifacts and scan results to GitHub Pages" || echo "No changes to commit"
           git push origin main
