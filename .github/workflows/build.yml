@@ -111,7 +111,7 @@ jobs:
           name: api-service-artifact
           path: api-service
 
-      # Step 7: Debug to confirm files are downloaded
+      # Step 7: Debug downloaded files
       - name: List Downloaded Files
         run: |
           echo "Core Application Files:"
@@ -125,9 +125,9 @@ jobs:
       - name: Prepare Deployment
         run: |
           mkdir -p deployed-artifacts
-          cp core-application/*.jar deployed-artifacts/ || echo "No Core Application JAR found"
-          cp utility-library/*.jar deployed-artifacts/ || echo "No Utility Library JAR found"
-          cp api-service/*.jar deployed-artifacts/ || echo "No API Service JAR found"
+          cp core-application/repo1/target/*.jar deployed-artifacts/ || echo "No Core Application JAR found"
+          cp utility-library/repo2/target/*.jar deployed-artifacts/ || echo "No Utility Library JAR found"
+          cp api-service/repo3/target/*.jar deployed-artifacts/ || echo "No API Service JAR found"
           cp core-application/core-application-scan.txt deployed-artifacts/ || echo "No Core Application Scan found"
           cp utility-library/utility-library-scan.txt deployed-artifacts/ || echo "No Utility Library Scan found"
           cp api-service/api-service-scan.txt deployed-artifacts/ || echo "No API Service Scan found"
