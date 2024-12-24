@@ -2,9 +2,6 @@ name: Build, Scan, Upload, and Deploy Artifacts
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      master
 
 jobs:
   build-scan-deploy:
@@ -96,33 +93,44 @@ jobs:
             api-service-scan.txt
 
       # Step 6: Download artifacts for deployment
-  #    - name: Download Core Application Artifact
-   #     uses: actions/download-artifact@v3
-    #    with:
-     #     name: core-application-artifact
-      #    path: core-application
+      - name: Download Core Application Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: core-application-artifact
+          path: core-application
 
-#      - name: Download Utility Library Artifact
- #       uses: actions/download-artifact@v3
-  ##       name: utility-library-artifact
-    #      path: utility-library
+      - name: Download Utility Library Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: utility-library-artifact
+          path: utility-library
 
-#      - name: Download API Service Artifact
- #       uses: actions/download-artifact@v3
-  #      with:
-   #       name: api-service-artifact
-    #      path: api-service
+      - name: Download API Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: api-service-artifact
+          path: api-service
 
-      # Step 6: Deploy artifacts and scan results to GitHub Pages
+      # Step 7: Debug to confirm files are downloaded
+      - name: List Downloaded Files
+        run: |
+          echo "Core Application Files:"
+          ls -al core-application
+          echo "Utility Library Files:"
+          ls -al utility-library
+          echo "API Service Files:"
+          ls -al api-service
+
+      # Step 8: Deploy artifacts and scan results to GitHub Pages
       - name: Prepare Deployment
         run: |
           mkdir -p deployed-artifacts
-          cp core-application/*.jar deployed-artifacts/
-          cp utility-library/*.jar deployed-artifacts/
-          cp api-service/*.jar deployed-artifacts/
-          cp core-application/core-application-scan.txt deployed-artifacts/
-          cp utility-library/utility-library-scan.txt deployed-artifacts/
-          cp api-service/api-service-scan.txt deployed-artifacts/
+          cp core-application/*.jar deployed-artifacts/ || echo "No Core Application JAR found"
+          cp utility-library/*.jar deployed-artifacts/ || echo "No Utility Library JAR found"
+          cp api-service/*.jar deployed-artifacts/ || echo "No API Service JAR found"
+          cp core-application/core-application-scan.txt deployed-artifacts/ || echo "No Core Application Scan found"
+          cp utility-library/utility-library-scan.txt deployed-artifacts/ || echo "No Utility Library Scan found"
+          cp api-service/api-service-scan.txt deployed-artifacts/ || echo "No API Service Scan found"
 
       - name: Generate File Listing
         run: |
