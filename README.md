@@ -1,41 +1,48 @@
-# Deep Security Dev Project
+# 🌟 Deep Security Core 🌟
 
-This project integrates three repositories into a CI/CD pipeline using GitHub Actions, GitHub Packages, and GitHub Pages.
+![Java](https://img.shields.io/badge/Java-11-blue) 
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.12-green) 
+![Build](https://img.shields.io/github/workflow/status/deep-security-dev/deep-security-core/Build%20and%20Scan)
 
----
-
-## Repositories
-
-1. [**deep-security-core**](https://github.com/deep-security-dev/deep-security-core): Core application logic.
-2. [**deep-security-utils**](https://github.com/deep-security-dev/deep-security-utils): Utility library.
-3. [**deep-security-api**](https://github.com/deep-security-dev/deep-security-api): API service.
+The **Deep Security Core** is the heart of the Deep Security system. It handles core functionalities and ensures seamless integration with other modules.
 
 ---
 
-## Workflows
+## ✨ Features
 
-### Build and Upload Workflow
-1. Pulls code from all repositories.
-2. Scans code and built artifacts for vulnerabilities.
-3. Uploads artifacts to GitHub Packages.
-
-### Deploy Workflow
-1. Downloads artifacts from GitHub Packages.
-2. Scans downloaded artifacts for vulnerabilities.
-3. Deploys the application to GitHub Pages.
+- 🔐 **Security-First**: Built with modern security principles.
+- 🚀 **Scalable**: Designed to handle large-scale deployments.
+- 🛠️ **Extensible**: Easily integrates with utility and API modules.
 
 ---
 
-## Deployment URL
+## 🛠️ Setup & Installation
 
-The deployed application can be accessed at:
-`https://deep-security-dev.github.io/deep-security-core/`
+### Prerequisites
+- Java 11 or later
+- Maven 3.8.1 or later
 
----
+### Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/deep-security-dev/deep-security-core.git
+2. Change to deep-security-core directory:
+   ```bash
+   cd deep-security-core
+3. Build Artifact:
+   ```bash
+   mvn clean package
 
-## Contributing
+## 🚦 Run & Test
 
-1. Fork the repository.
-2. Clone your fork: `git clone https://github.com/deep-security-dev/<repo>.git`
-3. Create a new branch: `git checkout -b feature-branch`
-4. Commit your changes and create a pull request.
+4. Run the Application
+```bash
+java -jar target/deep-security-core-1.0.0.jar
+
+```
+## 🛡️ Security Vulnerabilities
+This module is actively scanned for vulnerabilities using Trivy. See the latest scan report in the repository artifacts.
+
+## 📄 License
+Licensed under the MIT License.
+
